@@ -75,11 +75,23 @@ void printBoardIJ(int array[DIM][DIM])
     }
 }
 // prints the board that holds the ships;
-// This function is really only used for debugging purposes
 void printBoard(int array[DIM][DIM])
 {
+
+    for(int k = 0; k < DIM; k++)
+    {
+        if(k==0)
+        {
+            cout << left << setw(5) << " ";
+        }
+        cout << left << setw(5) << k+1;
+    }
+    cout << endl;
+
     for(int i = 0; i < DIM; i++)
     {
+        cout << left << setw(5) << char(i + 97);
+
         for(int j = 0; j < DIM; j++)
         {
             if(array[i][j] == -1)
@@ -391,7 +403,7 @@ coordinates obtainUserCoordinates(int playersBoard[DIM][DIM], int board[DIM][DIM
 // gets the probability density for a specific square on the board
 int getProbability(int board[DIM][DIM], ship *fleet, int fleetSize, int index)
 {
-    int probabilty = 0;
+    int probabilty = -1;
     // x coordinate of the square
     int x = index / DIM;
     // y coordinate of the square
