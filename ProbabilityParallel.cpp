@@ -415,24 +415,24 @@ int getProbability(int board[DIM][DIM], ship *fleet, int fleetSize, int index)
             // only checking live ships
             if(fleet[s].alive)
             {
-                probabilty++;
-            }
-            // check horizontally
-            // loop for the length of the ship
-            // start at the far left segment of the ship
-            // 'slide' the ship left and check each iteration
-            
-            // check vertically
-            // loop for the length of the ship
-            // start at the very top segment of the ship
-            // 'slide' the ship upwards and check each iteration
+                //variables for the left, right, above, below indices
+                int left, right, above, below;
 
+                // loop for the length of the ship
+                for(int i = 0; i < fleet[s].length; i++)
+                {
+
+                    // check horizontally
+                    // for each valid horizontal probability++
+                    
+                    // check vertically                
+                    // for each valid vertical probability++
+                }
+            }
         }
 
         return probabilty;  
     }
-    
-
 }
 
 
@@ -469,13 +469,13 @@ int main(int argc, char **argv){
     int square[2];
 
     // array of ships that need to be placed on the board:
-    int fleetSize = 3;
+    int fleetSize = 5;
     ship fleet[fleetSize];
-    fleet[0] = ship{0, 10, 0, 1, "carrier"};
-    fleet[1] = ship{1, 10, 0, 1, "battleship"};
-    fleet[2] = ship{2, 10, 0, 1, "destroyer"};
-    // fleet[3] = ship{3, 3, 0, 1, "submarine"};
-    // fleet[4] = ship{4, 2, 0, 1, "patrol"};    
+    fleet[0] = ship{0, 5, 0, 1, "carrier"};
+    fleet[1] = ship{1, 4, 0, 1, "battleship"};
+    fleet[2] = ship{2, 3, 0, 1, "destroyer"};
+    fleet[3] = ship{3, 3, 0, 1, "submarine"};
+    fleet[4] = ship{4, 2, 0, 1, "patrol"};    
 
     //MPI world start info
     int rank, size;
@@ -517,8 +517,8 @@ int main(int argc, char **argv){
         // // print the coordinates of the board:
         // printBoardIJ(board);
         // //print the board
-        // cout << "Board after ship placements:" << endl;
-        // printBoard(board);
+        cout << "Board after ship placements:" << endl;
+        printBoard(board);
 
         // update the other processors with this game's initial setup
         for(int i = 0; i < size; i++)
@@ -563,22 +563,22 @@ int main(int argc, char **argv){
                 probability[square[0]/DIM][square[0]%DIM] = square[1];
             }
 
-            printBoardIJ(board);
-            cout << endl;
-            printBoard(probability);
-
-
-            // // print revelant info to the player
-            // shotCount++;
-            // cout << "Current shot count: " << shotCount << endl;
-            // cout << "Current Board:" << endl;
-            // printPlayersBoard(playersBoard);
-
-            // // print the probability density functions for the player
+            // printBoardIJ(board);
             // cout << endl;
-            // cout << "Most likely unknown ship locations." << endl;
-            // cout << "(The higher the number the better the chance.)" << endl;
             // printBoard(probability);
+
+
+            // print revelant info to the player
+            shotCount++;
+            cout << "Current shot count: " << shotCount << endl;
+            cout << "Current Board:" << endl;
+            printPlayersBoard(playersBoard);
+
+            // print the probability density functions for the player
+            cout << endl;
+            cout << "Most likely unknown ship locations." << endl;
+            cout << "(The higher the number the better the chance.)" << endl;
+            printBoard(probability);
 
             // get the players next shot coordinates
             currentShot = obtainUserCoordinates(playersBoard, board, currentShot);
