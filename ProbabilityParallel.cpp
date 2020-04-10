@@ -33,23 +33,6 @@ struct coordinates
     int hit;
 };
 
-// prints the fleet status; was used for debugging
-void printFleetSatus(ship *fleet, int fleetSize)
-{
-    cout << "Fleet Status:" << endl;
-    for(int i = 0; i < fleetSize; i++)
-    {
-        cout << fleet[i].name << " is ";
-        if(fleet[i].alive)
-        {
-            cout << "alive." << endl;
-        }
-        else
-        {
-            cout << "dead." << endl;
-        }
-    }
-}
 // clears the board of any previously stored values
 void clearBoard(int array[DIM][DIM])
 {
@@ -309,7 +292,6 @@ int gameOver(ship *fleet, int fleetSize)
 }
 
 // gets the coordinates for the next shot from the player
-// there is probably an easier way to do this; but whatever, it works
 coordinates obtainUserCoordinates(int playersBoard[DIM][DIM], int board[DIM][DIM], coordinates current)
 {
     // initial coordinate is invalid until proven otherwise
@@ -429,51 +411,51 @@ int getProbability(int board[DIM][DIM], ship *fleet, int fleetSize, int index)
             {
                 bool possible;
                 int start, end;
-                // loop for the length of the ship
+                // loop for the number of ships the square could be a part of for all horizontal locations
                 for(int i = 1; i <= fleet[s].length; i++)
                 {
                     possible = true;
                     start = y-(fleet[s].length-i);
                     end = y-(fleet[s].length-i)+fleet[s].length-1;
+                    // loop through all the squares in the ship
                     for(int j = start; j <= end; j++)
                     {
+                        // if a ship can't be placed here because it's not entirely on the board
+                        // or a confirmed miss is there don't increase the probability
                         if(j < 0 || j > DIM || board[x][j] == 1)
                         {
                             possible = false;
                         }
                     }
+                    // if no invalid spaces are in the possible ship increase the squares probability
                     if(possible)
                     {
                         probabilty++;
                     }
                 }
+                // loop for the number of ships the square could be a part of for all vertical locations
                 for(int i = 1; i <= fleet[s].length; i++)
                 {
                     possible = true;
                     start = x-(fleet[s].length-i);
                     end = x-(fleet[s].length-i)+fleet[s].length-1;
+                    // loop through the number of squares in the possible ship
                     for(int j = start; j <= end; j++)
                     {
+                        // check that the ship space is on the board and not a miss
                         if(j < 0 || j > DIM || board[j][y] == 1)
                         {
                             possible = false;
                         }
                     }
+                    // if a ship can be placed in the location increase the probability
                     if(possible)
                     {
                         probabilty++;
                     }
-                    // check horizontally
-                    // for each valid horizontal probability++
-                    
-                    // check vertically                
-                    // for each valid vertical probability++
                 }
             }
         }
-        // if(index == 1 && fleet[s].length == 5){
-        //     cout<<probabilty<<endl;
-        // }
         return probabilty;  
     }
 }
@@ -556,13 +538,6 @@ int main(int argc, char **argv){
     // START THE GAME
     if(rank == 0)
     {
-        // Print the starting boards (for debugging)
-        // // print the coordinates of the board:
-        // printBoardIJ(board);
-        // //print the board
-        // cout << "Board after ship placements:" << endl;
-        // printBoard(board);
-
         // update the other processors with this game's initial setup
         for(int i = 0; i < size; i++)
         {
@@ -605,11 +580,6 @@ int main(int argc, char **argv){
                 // we put the square[1] value into the probabilty[x][y] spot
                 probability[square[0]/DIM][square[0]%DIM] = square[1];
             }
-
-            // printBoardIJ(board);
-            // cout << endl;
-            // printBoard(probability);
-
 
             // print revelant info to the player
             shotCount++;
@@ -711,7 +681,6 @@ int main(int argc, char **argv){
     
 
     MPI_Barrier(MCW);
-    cout << "process " << rank << " has terminated. " << endl;
     MPI_Finalize();
 
     return 0;
