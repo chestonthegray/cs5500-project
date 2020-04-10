@@ -1,0 +1,14 @@
+1. Implement a game of battleship that also shows the probability of the ship being in each square.
+
+2.  A 10x10 square battleship board should be generated randomly. The program will accept guesses from the player via command line of a letter and a number.
+
+3.  For each guess display the user’s board showing all of their hits and misses. Also display a board that shows the probability that each square contains a ship. This will be expressed through a number value where the higher the number the more likely a ship will be there.
+
+4.  Each process should compute the probability for a square and return the value to process 0 to be displayed.
+
+5.  Write up a LaTeX report describing your implamentation.
+
+6.  Turn in a .pdf of your report via canvas in a .zip file that includes your source code.
+
+7.  After the due date review two other people's submissions.
+
