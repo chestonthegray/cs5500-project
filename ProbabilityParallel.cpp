@@ -415,13 +415,42 @@ int getProbability(int board[DIM][DIM], ship *fleet, int fleetSize, int index)
             // only checking live ships
             if(fleet[s].alive)
             {
-                //variables for the left, right, above, below indices
-                int left, right, above, below;
-
+                bool possible;
+                int start, end;
                 // loop for the length of the ship
-                for(int i = 0; i < fleet[s].length; i++)
+                for(int i = 1; i <= fleet[s].length; i++)
                 {
-
+                    possible = true;
+                    start = y-(fleet[s].length-i);
+                    end = y-(fleet[s].length-i)+fleet[s].length-1;
+                    for(int j = start; j <= end; j++)
+                    {
+                        if(j < 0 || j > DIM || board[x][j] == 1)
+                        {
+                            possible = false;
+                        }
+                    }
+                    if(possible)
+                    {
+                        probabilty++;
+                    }
+                }
+                for(int i = 1; i <= fleet[s].length; i++)
+                {
+                    possible = true;
+                    start = x-(fleet[s].length-i);
+                    end = x-(fleet[s].length-i)+fleet[s].length-1;
+                    for(int j = start; j <= end; j++)
+                    {
+                        if(j < 0 || j > DIM || board[j][y] == 1)
+                        {
+                            possible = false;
+                        }
+                    }
+                    if(possible)
+                    {
+                        probabilty++;
+                    }
                     // check horizontally
                     // for each valid horizontal probability++
                     
@@ -430,7 +459,9 @@ int getProbability(int board[DIM][DIM], ship *fleet, int fleetSize, int index)
                 }
             }
         }
-
+        // if(index == 1 && fleet[s].length == 5){
+        //     cout<<probabilty<<endl;
+        // }
         return probabilty;  
     }
 }
@@ -517,8 +548,8 @@ int main(int argc, char **argv){
         // // print the coordinates of the board:
         // printBoardIJ(board);
         // //print the board
-        cout << "Board after ship placements:" << endl;
-        printBoard(board);
+        // cout << "Board after ship placements:" << endl;
+        // printBoard(board);
 
         // update the other processors with this game's initial setup
         for(int i = 0; i < size; i++)
