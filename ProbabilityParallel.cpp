@@ -403,6 +403,7 @@ int getProbability(int board[DIM][DIM], ship *fleet, int fleetSize, int index)
     }
     else
     {
+        probabilty++;
         // need to check both horizontally and vertically for each remaining ship
         for(int s = 0; s < fleetSize; s++)
         {
